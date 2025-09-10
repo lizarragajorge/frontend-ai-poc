@@ -1,0 +1,125 @@
+<div class="product-view-container">
+  <div class="product-header">
+    <h2>Data Products</h2>
+    <p class="product-description">
+      Discover and request access to available data products from AI Foundry and Azure Fabric
+    </p>
+    <button mat-raised-button color="primary" (click)="loadProducts()" [disabled]="isLoading">
+      <mat-icon>refresh</mat-icon>
+      Refresh Products
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Source</mat-label>
+        <mat-select [(value)]="selectedSource" (selectionChange)="onSourceFilterChange()">
+          <mat-option value="all">All Sources</mat-option>
+          <mat-option value="ai-foundry">AI Foundry</mat-option>
+          <mat-option value="azure-fabric">Azure Fabric</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Access Level</mat-label>
+        <mat-select [(value)]="selectedAccessLevel" (selectionChange)="onAccessLevelFilterChange()">
+          <mat-option value="all">All Access Levels</mat-option>
+          <mat-option value="public">Public</mat-option>
+          <mat-option value="restricted">Restricted</mat-option>
+          <mat-option value="private">Private</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="product-count">
+        <span class="count-badge">{{ filteredProducts.length }} products found</span>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Loading indicator -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+    <p>Loading data products...</p>
+  </div>
+
+  <!-- Products grid -->
+  <div class="products-grid" *ngIf="!isLoading">
+    <mat-card class="product-card" *ngFor="let product of filteredProducts">
+      <mat-card-header>
+        <div mat-card-avatar class="product-avatar">
+          <mat-icon [class]="'source-icon ' + product.source">{{ getSourceIcon(product.source) }}</mat-icon>
+        </div>
+        <mat-card-title>{{ product.name }}</mat-card-title>
+        <mat-card-subtitle>
+          <div class="product-metadata">
+            <span class="owner">{{ product.owner }}</span>
+            <span class="category">{{ product.category }}</span>
+          </div>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="product-description">{{ product.description }}</p>
+        
+        <div class="product-tags">
+          <mat-chip-set>
+            <mat-chip *ngFor="let tag of product.tags">{{ tag }}</mat-chip>
+          </mat-chip-set>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="product-details">
+          <div class="detail-row">
+            <mat-icon>source</mat-icon>
+            <span class="detail-label">Source:</span>
+            <span class="detail-value">{{ product.source }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <mat-icon>security</mat-icon>
+            <span class="detail-label">Access Level:</span>
+            <mat-chip [color]="getAccessLevelColor(product.accessLevel)" selected>
+              {{ product.accessLevel | titlecase }}
+            </mat-chip>
+          </div>
+          
+          <div class="detail-row">
+            <mat-icon>schedule</mat-icon>
+            <span class="detail-label">Last Updated:</span>
+            <span class="detail-value">{{ product.lastUpdated | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button 
+          mat-button 
+          color="primary"
+          (click)="requestAccess(product)"
+          [disabled]="product.accessLevel === 'public'"
+        >
+          <mat-icon>lock_open</mat-icon>
+          {{ product.accessLevel === 'public' ? 'Public Access' : 'Request Access' }}
+        </button>
+        <button mat-button>
+          <mat-icon>info</mat-icon>
+          Details
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="!isLoading && filteredProducts.length === 0">
+    <mat-icon class="empty-icon">inventory_2</mat-icon>
+    <h3>No Data Products Found</h3>
+    <p>Try adjusting your filters or check back later for new products.</p>
+    <button mat-raised-button color="primary" (click)="loadProducts()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
+</div>

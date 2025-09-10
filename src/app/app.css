@@ -1,0 +1,103 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #fafafa;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.app-icon {
+  margin-right: 12px;
+}
+
+.app-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.main-content {
+  flex: 1;
+  overflow: hidden;
+}
+
+.main-tabs {
+  height: 100%;
+}
+
+.main-tabs .mat-mdc-tab-body-wrapper {
+  height: calc(100% - 48px);
+}
+
+.main-tabs .mat-mdc-tab-body {
+  height: 100%;
+}
+
+.main-tabs .mat-mdc-tab-body-content {
+  height: 100%;
+  overflow: auto;
+}
+
+.tab-content {
+  height: 100%;
+  padding: 0;
+}
+
+.tab-icon {
+  margin-right: 8px;
+}
+
+/* Material Design Tab customizations */
+.main-tabs .mat-mdc-tab-header {
+  border-bottom: 1px solid #e0e0e0;
+  background: white;
+}
+
+.main-tabs .mat-mdc-tab {
+  min-width: 160px;
+}
+
+.main-tabs .mat-mdc-tab-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 1.1rem;
+  }
+  
+  .main-tabs .mat-mdc-tab {
+    min-width: 120px;
+  }
+  
+  .tab-icon {
+    margin-right: 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-title {
+    display: none;
+  }
+  
+  .main-tabs .mat-mdc-tab {
+    min-width: 80px;
+  }
+  
+  .main-tabs .mat-mdc-tab-label-content {
+    font-size: 0.9rem;
+  }
+}
