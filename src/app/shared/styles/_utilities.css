@@ -1,0 +1,18 @@
+/* Utility classes */
+.flex { display:flex; }
+.flex-col { display:flex; flex-direction:column; }
+.center { display:flex; align-items:center; justify-content:center; }
+.gap-xs { gap:4px; } .gap-sm { gap:8px; } .gap { gap:14px; } .gap-lg { gap:24px; }
+.mt-sm { margin-top:8px; } .mt { margin-top:16px; } .mt-lg { margin-top:32px; }
+.mb-sm { margin-bottom:8px; } .mb { margin-bottom:16px; } .mb-lg { margin-bottom:32px; }
+.text-xs { font-size:11px; }
+.truncate { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.w-full { width:100%; }
+.max-w { max-width:1280px; margin:0 auto; }
+.muted { color: var(--gray-500); }
+
+/* Color helpers */
+.tone { background: var(--brand-light); color: var(--brand-dark); }
+.light { background:#e0f2fe; color:#075985; }
+
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
