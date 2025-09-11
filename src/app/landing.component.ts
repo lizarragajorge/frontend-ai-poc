@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-landing',
 	standalone: true,
+	imports: [RouterLink],
 	template: `
 	<div class="home-shell">
 		<div class="hero hero-card">
