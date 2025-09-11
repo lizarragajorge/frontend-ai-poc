@@ -2,6 +2,24 @@
 
 An opinionated starter template for building an internal Data Marketplace / Data Product Portal. Provides a clean foundation for discovering data products, viewing product detail, curated product groupings, and future hooks for AI interaction & access workflows.
 
+## Screenshots
+| Home | Browse | Product Detail |
+|------|--------|----------------|
+| ![Home – Data Marketplace](docs/screenshots/home.png) | ![Browse Data Products](docs/screenshots/browse.png) | ![Product Detail View](docs/screenshots/product-detail.png) |
+
+<details>
+<summary>Individual Images</summary>
+
+**Home (Hero + KPIs)**  
+![Home – Data Marketplace](docs/screenshots/home.png)
+
+**Browse Page**  
+![Browse Data Products](docs/screenshots/browse.png)
+
+**Product Detail**  
+![Product Detail View](docs/screenshots/product-detail.png)
+
+</details>
 
 ## Core Features (Implemented)
 * Product Browse: simplified, readable layout with sidebar filters (domain / PSL placeholder) and curated sections (Top Rated, Your Top Used – mock data).
