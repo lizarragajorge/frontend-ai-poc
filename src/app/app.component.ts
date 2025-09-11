@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
 	selector: 'app-root',
@@ -32,5 +32,6 @@ import { RouterModule } from '@angular/router';
 	`]
 })
 export class AppComponent {
-	goHome(){ location.pathname !== '/' && (window.location.href = '/'); }
+	constructor(private router: Router) {}
+	goHome(){ if(this.router.url !== '/') { this.router.navigate(['/']); } }
 }
