@@ -44,7 +44,7 @@ src/app/
 | `npm start` | Dev server (Angular CLI) |
 | `npm run build` | Production build (browser output in `dist/`) |
 | `npm test` | Unit tests (Karma + Jasmine) |
-| `npm run preview` | Static serve built assets (http-server) |
+| `npm run preview` | Static serve built assets (http-server, dist/data-marketplace) |
 
 ## Prerequisites
 * Node.js 20.19.0+ (see `.nvmrc`)

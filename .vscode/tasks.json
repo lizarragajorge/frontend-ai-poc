@@ -13,7 +13,7 @@
 			"group": "build"
 		},
 		{
-			"label": "serve-lean-data-app",
+			"label": "serve-data-marketplace",
 			"type": "shell",
 			"command": "npm",
 			"args": [

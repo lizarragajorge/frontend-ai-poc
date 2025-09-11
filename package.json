@@ -1,5 +1,5 @@
 {
-	"name": "lean-data-app",
+	"name": "data-marketplace",
 	"version": "0.0.1",
 	"private": true,
 	"type": "module",
@@ -11,7 +11,7 @@
 		"start": "ng serve --port 4200",
 		"build": "ng build --configuration production",
 		"test": "ng test --watch=false",
-		"preview": "npx http-server dist/lean-data-app/browser -p 4201"
+		"preview": "npx http-server dist/data-marketplace/browser -p 4201"
 	},
 	"dependencies": {
 		"@angular/animations": "^20.0.0",
