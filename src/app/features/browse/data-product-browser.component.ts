@@ -9,8 +9,13 @@ import { DataProductService } from '../../services/data-product.service';
 	imports: [CommonModule],
 	template: `
 <div class="browse">
-	<h1 class="page-title">Data Product Browser</h1>
 	<div class="browser-card">
+		<div class="head">
+			<div class="title-wrap">
+				<h1 class="page-title">Data Products</h1>
+				<p class="page-sub">Browse, filter, and explore available assets</p>
+			</div>
+		</div>
 		<div class="layout">
 			<!-- Sidebar -->
 			<aside class="side-col">
