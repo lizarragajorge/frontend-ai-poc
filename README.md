@@ -97,3 +97,28 @@ Internal starter; adapt freely within your organization. Remove or replace any p
 
 ---
 Questions or improvements you'd like implemented next? Open an issue or extend the roadmap section.
+
+## Deployment (Azure Static Web Apps)
+1. Build: `npm run build`
+2. Deploy dist folder via Azure Static Web Apps (or use SWA GitHub Action).
+3. Ensure `staticwebapp.config.json` is included (SPA fallback already configured).
+4. (Optional) Inject runtime config by adding before closing </head> in `index.html` (or via a SWA response transform):
+```html
+<script>
+	window.__APP_CONFIG__ = { apiBaseUrl:'/api', aiApiBaseUrl:'/api/ai', aiDeployment:'gpt-4o-mini' };
+</script>
+```
+
+### Architecture Additions
+| Concern | Abstraction | Location |
+|---------|-------------|----------|
+| Runtime config | `APP_CONFIG` token | `core/config/app-config.service.ts` |
+| Data access | `DATA_PRODUCT_GATEWAY` | `core/data/` |
+| AI models | `AiModelService` | `core/ai/` |
+| Auth placeholder | `AuthService` | `core/auth/` |
+| Feature flags | `FeatureFlagsService` | `core/flags/` |
+| Telemetry hook | `TelemetryService` | `core/telemetry/` |
+
+Swap the mock gateway with a real Fabric gateway by providing a new class for `DATA_PRODUCT_GATEWAY` in `main.ts`.
+
+See `docs/INTEGRATION-AZURE.md` for extended notes.
