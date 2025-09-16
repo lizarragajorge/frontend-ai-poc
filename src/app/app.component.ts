@@ -5,31 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 	selector: 'app-root',
 	standalone: true,
 	imports: [RouterModule],
-	template: `
-		<nav class="nav-bar">
-			<span class="logo" aria-label="Portal Home" (click)="goHome()">▶</span>
-			<span class="flex-spacer"></span>
-			<a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
-			<a routerLink="/browse" routerLinkActive="active">Browse</a>
-			<a routerLink="/models" routerLinkActive="active">Models</a>
-			<a routerLink="/agents" routerLinkActive="active">Agents</a>
-			<a routerLink="/dashboards" routerLinkActive="active">Dashboards</a>
-		</nav>
-		<main class="main-shell">
-			<router-outlet></router-outlet>
-		</main>
-	`,
-	styles:[`
-		:host { font-family: var(--font-stack, system-ui); display:block; }
-		.nav-bar { display:flex; gap:6px; padding:8px 24px 10px; background:#fff; border-bottom:1px solid var(--gray-150,#e2e5e9); position:sticky; top:0; z-index:50; align-items:center; }
-		.flex-spacer { flex:1 1 auto; }
-		.logo { cursor:pointer; font-size:15px; line-height:1; color:var(--brand,#c41d23); font-weight:700; display:inline-flex; align-items:center; justify-content:center; padding:4px 6px 6px; border-radius:6px; }
-		.logo:hover { background:var(--brand-light,#fde7e8); }
-		.nav-bar a { text-decoration:none; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.85px; color:var(--gray-700,#444); padding:6px 14px 7px; border-radius:8px; position:relative; transition:background .15s,color .15s; }
-		.nav-bar a.active { background:var(--brand,#c41d23); color:var(--brand-on,#fff); box-shadow:0 0 0 1px var(--brand,#c41d23); }
-		.nav-bar a:not(.active):hover { background:var(--gray-100,#f2f3f5); }
-		.main-shell { padding:0 0 54px; }
-	`]
+	templateUrl: './app.component.html',
+	styleUrls: ['./app.component.css']
 })
 export class AppComponent {
 	constructor(private router: Router) {}

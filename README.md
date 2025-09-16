@@ -97,3 +97,17 @@ Internal starter; adapt freely within your organization. Remove or replace any p
 
 ---
 Questions or improvements you'd like implemented next? Open an issue or extend the roadmap section.
+
+## Template / Style Externalization
+All previously inline component templates & styles have been moved to separate files for clarity and easier collaborative editing:
+
+| Component | Template | Styles |
+|-----------|----------|--------|
+| Landing | `landing.component.html` | `landing.component.css` |
+| App Shell | `app.component.html` | `app.component.css` |
+| Browse | `features/browse/data-product-browser.component.html` | `features/browse/data-product-browser.component.css` |
+| Product Detail | `features/product/data-product-detail.component.html` | `features/product/data-product-detail.component.css` |
+| Product List | `features/product/data-product-list.component.html` | (inlined previously; no styles yet) |
+| Chat Panel | `features/chat/chat-panel.component.html` | `features/chat/chat-panel.component.css` |
+
+Add new components following the same pattern: generate with Angular CLI (or manually) and prefer external templates for anything non-trivial (> ~15 lines).
