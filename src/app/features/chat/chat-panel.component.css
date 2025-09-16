@@ -1,0 +1,9 @@
+.chat-shell { display:flex; flex-direction:column; gap:.75rem; }
+.messages { display:flex; flex-direction:column; gap:.4rem; max-height:300px; overflow:auto; }
+.msg { background:#f0f2f5; padding:.45rem .6rem; border-radius:8px; font-size:.7rem; }
+.msg.user { background:#d93030; color:#fff; align-self:flex-end; }
+.composer { display:flex; flex-direction:column; gap:.5rem; }
+textarea { resize:vertical; min-height:70px; padding:.55rem .6rem; font:inherit; border:1px solid #d0d7de; border-radius:6px; }
+.btn { align-self:flex-end; background:#d93030; color:#fff; border:none; padding:.5rem .9rem; border-radius:6px; font-size:.7rem; font-weight:600; cursor:pointer; }
+.btn[disabled]{ opacity:.5; cursor:not-allowed; }
+.empty { color:#666; }

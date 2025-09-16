@@ -1,0 +1,12 @@
+<nav class="nav-bar">
+	<span class="logo" aria-label="Portal Home" (click)="goHome()">▶</span>
+	<span class="flex-spacer"></span>
+	<a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+	<a routerLink="/browse" routerLinkActive="active">Browse</a>
+	<a routerLink="/models" routerLinkActive="active">Models</a>
+	<a routerLink="/agents" routerLinkActive="active">Agents</a>
+	<a routerLink="/dashboards" routerLinkActive="active">Dashboards</a>
+</nav>
+<main class="main-shell">
+	<router-outlet></router-outlet>
+</main>
