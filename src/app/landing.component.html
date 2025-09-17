@@ -23,9 +23,13 @@
 		<div class="chat-box">
 			<div class="messages" *ngIf="ai.messages().length; else emptyState">
 				<div class="msg" *ngFor="let m of ai.messages()" [class.user]="m.role==='user'" [class.ai]="m.role==='ai'">
-					<div class="bubble">{{m.text}}</div>
+					<div class="avatar" [attr.aria-label]="m.role==='user' ? 'You' : 'AI'">{{ m.role==='user' ? 'U' : 'AI' }}</div>
+					<div class="bubble" [innerText]="m.text"></div>
 				</div>
-				<div class="msg ai" *ngIf="ai.sending()"><div class="bubble">Thinking…</div></div>
+				<div class="msg ai" *ngIf="ai.sending()">
+					<div class="avatar" aria-hidden="true">AI</div>
+					<div class="bubble typing"><span></span><span></span><span></span></div>
+				</div>
 			</div>
 			<ng-template #emptyState>
 				<p class="hint">Ask about a data product, table, or metric. Try: “List schemas for Sales Orders”</p>
