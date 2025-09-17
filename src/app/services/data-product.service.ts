@@ -24,6 +24,14 @@ export class DataProductService {
 	private loading = signal<boolean>(false);
 	private error = signal<string | null>(null);
 
+	// Tables by product (detail view)
+	private tablesLoading = signal<boolean>(false);
+	private tablesError = signal<string | null>(null);
+	private tablesByProduct = signal<Record<string, Array<Record<string, any>>>>({});
+
+	// Table sample rows cache keyed by fully qualified table name
+	private sampleCache = signal<Record<string, { rows: Array<Record<string, any>>; loading: boolean; error?: string }>>({});
+
 	domainFilter = signal<string | null>(null);
 	pslFilter = signal<string | null>(null);
 	filterTerm = signal<string>('');
@@ -47,11 +55,33 @@ export class DataProductService {
 	isLoading = () => this.loading();
 	loadError = () => this.error();
 
+	// Tables selectors
+	tablesIsLoading = () => this.tablesLoading();
+	tablesLoadError = () => this.tablesError();
+	tablesFor = (productName: string) => this.tablesByProduct()[productName] || [];
+
 	private readonly apiBase = environment.apiBaseUrl.replace(/\/+$/, '');
 
 	constructor(private http: HttpClient) {
 		// Auto-load on service instantiation
 		this.refresh();
+	}
+
+	loadTablesByProduct(productName: string) {
+		if (!productName) return;
+		this.tablesLoading.set(true);
+		this.tablesError.set(null);
+		this.http.get<TablesResponse>(`${this.apiBase}/data-products/${encodeURIComponent(productName)}/tables`)
+			.pipe(finalize(() => this.tablesLoading.set(false)))
+			.subscribe({
+				next: resp => {
+					if (!resp.success) { this.tablesError.set(resp.error || 'Unknown error'); return; }
+					const map = { ...this.tablesByProduct() };
+					map[resp.product || productName] = resp.rows || [];
+					this.tablesByProduct.set(map);
+				},
+				error: err => this.tablesError.set(err.message || 'Network error')
+			});
 	}
 
 	refresh(limit = 100) {
@@ -117,6 +147,45 @@ export class DataProductService {
 	setFilterTerm(v: string) { this.filterTerm.set(v); }
 
 	getById(id: string) { return this.products().find(p => p.id === id); }
+
+	// Fetch sample rows for a given table (catalog.schema.table)
+	loadTableSample(catalog?: string, schema?: string, table?: string, limit = 5) {
+		if (!catalog || !schema || !table) return;
+		const key = `${catalog}.${schema}.${table}`;
+		const current = { ...this.sampleCache() };
+		current[key] = { rows: [], loading: true };
+		this.sampleCache.set(current);
+		const url = `${this.apiBase}/table-sample?catalog=${encodeURIComponent(catalog)}&schema=${encodeURIComponent(schema)}&table=${encodeURIComponent(table)}&limit=${limit}`;
+		this.http.get<TableSampleResponse>(url)
+			.pipe(finalize(() => {
+				const snap = { ...this.sampleCache() };
+				if (snap[key]) snap[key].loading = false;
+				this.sampleCache.set(snap);
+			}))
+			.subscribe({
+				next: resp => {
+					const snap = { ...this.sampleCache() };
+					if (!resp.success) {
+						snap[key] = { rows: [], loading: false, error: resp.error || 'Unknown error' };
+					} else {
+						snap[key] = { rows: resp.rows || [], loading: false };
+					}
+					this.sampleCache.set(snap);
+				},
+				error: err => {
+					const snap = { ...this.sampleCache() };
+					snap[key] = { rows: [], loading: false, error: err.message || 'Network error' };
+					this.sampleCache.set(snap);
+				}
+			});
+	}
+
+	// Accessor helpers for samples
+	sampleFor(catalog?: string, schema?: string, table?: string) {
+		if (!catalog || !schema || !table) return { rows: [], loading: false };
+		const key = `${catalog}.${schema}.${table}`;
+		return this.sampleCache()[key] || { rows: [], loading: false };
+	}
 }
 
 interface DatabricksRowsResponse {
@@ -126,4 +195,25 @@ interface DatabricksRowsResponse {
 	statementId?: string;
 	count?: number;
 	sql?: string;
+}
+
+interface TablesResponse {
+	success: boolean;
+	product?: string;
+	rows: Array<Record<string, any>>;
+	count?: number;
+	sql?: string;
+	statementId?: string;
+	error?: string;
+}
+
+interface TableSampleResponse {
+	success: boolean;
+	rows: Array<Record<string, any>>;
+	count?: number;
+	catalog?: string;
+	schema?: string;
+	table?: string;
+	sql?: string;
+	error?: string;
 }

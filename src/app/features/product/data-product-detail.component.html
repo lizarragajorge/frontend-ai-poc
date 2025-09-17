@@ -17,12 +17,55 @@
 					<p>This data product serves the <strong>{{p.domain}}</strong> domain. Refresh cadence: daily. Use for analytics, dashboards and ML feature sourcing.</p>
 				</div>
 				<div class="block">
-					<h2 class="block-title">Sample Fields</h2>
-					<ul class="fields">
-						<li><code>id</code> string – unique id</li>
-						<li><code>created_at</code> timestamp – ingestion time</li>
-						<li><code>metric_value</code> number – core metric</li>
-					</ul>
+					<h2 class="block-title">Tables</h2>
+					<div *ngIf="svc.tablesIsLoading(); else tablesContent" class="table-skeleton">
+						<div class="row" *ngFor="let n of [].constructor(5)">
+							<div class="cell w25"></div>
+							<div class="cell w35"></div>
+							<div class="cell w20"></div>
+						</div>
+					</div>
+					<ng-template #tablesContent>
+						<div *ngIf="svc.tablesLoadError()" class="error-box-sm">Tables failed: {{svc.tablesLoadError()}}</div>
+						<ng-container *ngIf="!svc.tablesLoadError()">
+							<div class="schema-group" *ngFor="let g of tableGroups()">
+								<h3 class="schema-title">{{g.schema}}</h3>
+								<table class="tables">
+									<thead><tr><th>Name</th><th>Type</th><th class="col-actions">Preview</th></tr></thead>
+									<tbody>
+										<tr *ngFor="let t of g.tables">
+											<td class="mono">{{t.table_name || t.c2}}</td>
+											<td>{{t.table_type || t.c3}}</td>
+											<td class="col-actions"><button class="mini" (click)="togglePreview(t)">{{isOpen(t) ? 'Hide' : 'Show'}} sample</button></td>
+										</tr>
+										<tr class="sample-row" *ngFor="let t of g.tables">
+											<td colspan="3">
+												<div class="sample" *ngIf="isOpen(t)">
+													<ng-container *ngIf="svc.sampleFor(t.table_catalog || t.c0, t.table_schema || t.c1, t.table_name || t.c2) as sample">
+														<div class="sample-loading" *ngIf="sample.loading">Loading sample…</div>
+														<div class="sample-error" *ngIf="!sample.loading && sample.error">{{sample.error}}</div>
+														<table class="sample-table" *ngIf="!sample.loading && sample.rows?.length">
+															<thead>
+																<tr>
+																	<th *ngFor="let c of sampleColumnsFor(t)">{{c}}</th>
+																</tr>
+															</thead>
+															<tbody>
+																<tr *ngFor="let r of sample.rows">
+																	<td *ngFor="let c of sampleColumnsFor(t)"><span class="truncate">{{r[c]}}</span></td>
+																</tr>
+															</tbody>
+														</table>
+													</ng-container>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="empty small" *ngIf="!tableGroups().length">No tables found.</div>
+						</ng-container>
+					</ng-template>
 				</div>
 				<div class="actions">
 					<button class="primary">Request Access</button>
