@@ -30,3 +30,32 @@ yarn-error.log*
 # macOS Finder metadata
 .DS_Store
 **/.DS_Store
+
+# .NET / Azure Functions (backend)
+azure-func-databricks/bin/
+azure-func-databricks/obj/
+
+# Local settings (contains secrets) - keep out of source control
+azure-func-databricks/local.settings.json
+
+# Azure Functions core tools artifacts
+azure-func-databricks/.azurefunctions/
+azure-func-databricks/*.deps.json
+azure-func-databricks/*.runtimeconfig.json
+azure-func-databricks/extensions.csproj
+
+# User generated launch / debug settings (if added later)
+azure-func-databricks/Properties/launchSettings.json
+
+# Build logs
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio / Rider / VS Code clutter (backend context)
+/.vs/
+*.ide/
+*.swp
+*.bak
+
