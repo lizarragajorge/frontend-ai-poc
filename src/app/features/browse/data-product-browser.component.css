@@ -73,3 +73,26 @@
 .tags span { background:var(--gray-100); padding:6px 12px 7px; font-size:.65rem; font-weight:600; letter-spacing:.6px; border-radius:18px; text-transform:uppercase; }
 
 .empty { padding:70px 0; text-align:center; font-size:.95rem; color:var(--gray-600); }
+
+/* Loading Skeleton */
+.skeleton-grid .card { position:relative; pointer-events:none; }
+.skeleton { border-color:var(--gray-100); background:linear-gradient(135deg,#f8f8f8 0%,#f3f3f3 40%,#f8f8f8 80%); }
+.pulse { background:linear-gradient(90deg,#f4f4f4 0%,#ededed 50%,#f4f4f4 100%); background-size:200% 100%; animation:pulse 1.4s ease-in-out infinite; }
+.skeleton .initial { background:#ececec; color:transparent; }
+.skeleton .line { display:block; height:15px; background:#e5e5e5; border-radius:6px; margin:6px 0; animation:pulse 1.4s ease-in-out infinite; }
+.skeleton .desc .line { height:12px; }
+.skeleton .tags .tag { background:#e3e3e3; height:22px; border-radius:14px; animation:pulse 1.4s ease-in-out infinite; }
+.w70 { width:70%; }
+.w90 { width:90%; }
+.w40 { width:40%; }
+.w30 { width:30%; }
+.w25 { width:25%; }
+.w60 { width:60%; }
+.mini-skeleton .bar { height:10px; background:#e3e3e3; border-radius:5px; animation:pulse 1.4s ease-in-out infinite; }
+.stack { display:flex; flex-direction:column; gap:8px; }
+@keyframes pulse { 0%{background-position:0 0;} 100%{background-position:-200% 0;} }
+
+/* Error State */
+.error-box { border:1px solid #fecaca; background:#fff5f5; color:#b91c1c; padding:14px 18px; border-radius:14px; display:flex; align-items:center; gap:18px; font-size:.9rem; }
+.retry { background:#b91c1c; color:#fff; border:none; padding:8px 14px; border-radius:10px; font-weight:600; cursor:pointer; font-size:.75rem; }
+.retry:hover { background:#991b1b; }

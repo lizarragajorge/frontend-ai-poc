@@ -9,6 +9,13 @@
 		<div class="layout">
 			<!-- Sidebar -->
 			<aside class="side-col">
+				<!-- Loading indicator small in sidebar -->
+				<div class="side-section" *ngIf="svc.isLoading()">
+					<div class="mini-skeleton stack">
+						<div class="bar w60"></div>
+						<div class="bar w40"></div>
+					</div>
+				</div>
 				<div class="side-section">
 					<h2 class="side-heading">Filter</h2>
 					<div class="crumbs">All &gt; Data Products<span *ngIf="svc.domainFilter()"> &gt; {{svc.domainFilter()}}</span><span *ngIf="svc.pslFilter()"> &gt; {{svc.pslFilter()}}</span></div>
@@ -35,6 +42,32 @@
 
 			<!-- Main content -->
 			<main class="main-col">
+				<!-- Error state -->
+				<div *ngIf="svc.loadError() && !svc.isLoading()" class="error-box">
+					<strong>Failed to load:</strong> {{svc.loadError()}}
+					<button class="retry" (click)="svc.refresh()">Retry</button>
+				</div>
+
+				<!-- Loading skeletons -->
+				<div *ngIf="svc.isLoading()" class="grid skeleton-grid" aria-hidden="true">
+					<div class="card skeleton" *ngFor="let n of [].constructor(8); index as i">
+						<div class="initial pulse"></div>
+						<div class="card__body">
+							<h3 class="line w70"></h3>
+							<p class="desc">
+								<span class="line w90"></span>
+								<span class="line w40"></span>
+							</p>
+							<div class="tags">
+								<span class="tag line w30"></span>
+								<span class="tag line w25"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Actual content hidden while loading -->
+				<ng-container *ngIf="!svc.isLoading()">
 				<section class="block domain-block">
 					<h2 class="block-title">Domain</h2>
 					<div class="thumbs">
@@ -76,6 +109,7 @@
 					</div>
 				</div>
 				<ng-template #empty><div class="empty">No products found.</div></ng-template>
+				</ng-container>
 			</main>
 		</div>
 	</div>

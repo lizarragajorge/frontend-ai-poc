@@ -1,20 +1,20 @@
-<ng-container *ngIf="product; else notFound">
+<ng-container *ngIf="product() as p; else notFound">
 	<div class="detail">
 		<button class="back" routerLink="/browse">← Back</button>
 		<div class="detail-card">
 			<div class="head">
-				<div class="avatar" aria-hidden="true">{{product.name[0]}}</div>
+				<div class="avatar" aria-hidden="true">{{p.name[0]}}</div>
 				<div class="title-wrap">
-					<h1 class="page-title">{{product.name}}</h1>
-					<p class="page-sub">{{product.domain}} • {{product.psl}}</p>
-					<p class="lead">{{product.description}}</p>
-					<div class="tags"><span>{{product.domain}}</span><span>{{product.psl}}</span><span *ngIf="product.rating" class="rate">★ {{product.rating}}</span></div>
+					<h1 class="page-title">{{p.name}}</h1>
+					<p class="page-sub">{{p.domain}} • {{p.psl}}</p>
+					<p class="lead">{{p.description}}</p>
+					<div class="tags"><span>{{p.domain}}</span><span>{{p.psl}}</span><span *ngIf="p.rating" class="rate">★ {{p.rating}}</span></div>
 				</div>
 			</div>
 			<div class="main-col">
 				<div class="block">
 					<h2 class="block-title">Overview</h2>
-					<p>This data product serves the <strong>{{product.domain}}</strong> domain. Refresh cadence: daily. Use for analytics, dashboards and ML feature sourcing.</p>
+					<p>This data product serves the <strong>{{p.domain}}</strong> domain. Refresh cadence: daily. Use for analytics, dashboards and ML feature sourcing.</p>
 				</div>
 				<div class="block">
 					<h2 class="block-title">Sample Fields</h2>

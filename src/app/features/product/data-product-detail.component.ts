@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DataProductService } from '../../services/data-product.service';
@@ -11,9 +11,10 @@ import { DataProductService } from '../../services/data-product.service';
 	styleUrls: ['./data-product-detail.component.css']
 })
 export class DataProductDetailComponent {
-	product: any;
+	private productIdSignal = signal<string>('');
+	product = computed(() => this.svc.getById(this.productIdSignal()));
 	constructor(private route: ActivatedRoute, private svc: DataProductService) {
 		const id = this.route.snapshot.paramMap.get('id') || '';
-		this.product = this.svc.getById(id);
+		this.productIdSignal.set(id);
 	}
 }
