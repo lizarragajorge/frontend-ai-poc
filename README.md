@@ -81,6 +81,25 @@ npm start
 * Accessibility: focus-visible outlines preserved; aria attributes ready for enhancement.
 * Mock data lives in `mock-data-products.json`; replace with API calls in `DataProductService`.
 
+### Azure Functions backend (Databricks + Fabric)
+- Location: `azure-func-databricks/` (dotnet-isolated)
+- Endpoints:
+	- `GET /api/data-products`, `GET /api/data-products/{product}/tables`, `GET /api/table-sample`
+	- Fabric REST: `POST /api/fabric/chat` (proxies to Fabric Agent chat URL)
+	- Fabric SDK: `POST /api/fabric/chat-sdk` (uses Azure.AI.Projects + Persistent Agents)
+- Local settings required for Fabric SDK:
+	- `PROJECT_ENDPOINT`: Project endpoint, e.g. `https://<service>.ai.azure.com/api/projects/<project-id>`
+	- `FABRIC_AGENT_ID`: Persistent Agent id (e.g., `asst_...`)
+	- Auth: Entra ID via `DefaultAzureCredential` or set `FABRIC_TENANT_ID`, `FABRIC_CLIENT_ID`, `FABRIC_CLIENT_SECRET` for ClientSecretCredential
+	- Optional REST path: `FABRIC_API_KEY`, `FABRIC_AGENT_CHAT_URL`, `FABRIC_API_VERSION`
+	- Example version (per tenant): `FABRIC_API_VERSION=2025-09-09`
+
+Run locally:
+```
+cd azure-func-databricks
+func start
+```
+
 ## Customization Tips
 | Need | Where |
 |------|-------|

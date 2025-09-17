@@ -26,7 +26,9 @@ var host = new HostBuilder()
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         });
+        services.AddHttpClient();
         services.AddSingleton<Shared.DatabricksClient>();
+        services.AddSingleton<Shared.FabricAgentClient>();
     })
     .ConfigureFunctionsWorkerDefaults()
     .Build();

@@ -20,8 +20,23 @@
 
 	<div class="conversation card">
 		<div class="section-head">Conversational Access</div>
-		<div class="input-wrap">
-			<textarea placeholder="Ask about a data product" disabled></textarea>
+		<div class="chat-box">
+			<div class="messages" *ngIf="ai.messages().length; else emptyState">
+				<div class="msg" *ngFor="let m of ai.messages()" [class.user]="m.role==='user'" [class.ai]="m.role==='ai'">
+					<div class="bubble">{{m.text}}</div>
+				</div>
+				<div class="msg ai" *ngIf="ai.sending()"><div class="bubble">Thinking…</div></div>
+			</div>
+			<ng-template #emptyState>
+				<p class="hint">Ask about a data product, table, or metric. Try: “List schemas for Sales Orders”</p>
+			</ng-template>
+			<form class="composer" (submit)="onSubmit($event)">
+				<textarea #ta [value]="prompt()" (input)="prompt.set(ta.value)" (keydown.enter)="onEnter($event)" rows="3" placeholder="Ask about a data product"></textarea>
+				<div class="composer-actions">
+					<button type="submit" class="send" [disabled]="ai.sending() || !prompt().trim()">Send</button>
+					<button type="button" class="reset" (click)="ai.reset()" [disabled]="ai.sending() || !ai.messages().length">Reset</button>
+				</div>
+			</form>
 		</div>
 	</div>
 
