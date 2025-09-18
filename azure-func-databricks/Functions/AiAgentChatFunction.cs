@@ -45,18 +45,64 @@ public class AiAgentChatFunction
                 return res;
             }
 
-            var tenantId = _config["AZURE_TENANT_ID"];
-            TokenCredential credential = string.IsNullOrWhiteSpace(tenantId)
-                ? new DefaultAzureCredential()
-                : new DefaultAzureCredential(new DefaultAzureCredentialOptions { TenantId = tenantId });
+            // Optional: accept an existing agentId in the request body
+            string? incomingAgentId = null;
+            using (var reader = new StreamReader(req.Body))
+            {
+                var bodyText = await reader.ReadToEndAsync();
+                if (!string.IsNullOrWhiteSpace(bodyText))
+                {
+                    try
+                    {
+                        using var doc = JsonDocument.Parse(bodyText);
+                        if (doc.RootElement.TryGetProperty("agentId", out var aidEl))
+                        {
+                            incomingAgentId = aidEl.GetString();
+                        }
+                    }
+                    catch
+                    {
+                        // ignore malformed JSON; proceed with creating agent
+                    }
+                }
+            }
+
+            // If no agentId provided in the request, try to use configured agent id
+            if (string.IsNullOrWhiteSpace(incomingAgentId))
+            {
+                incomingAgentId = _config["AZURE_AI_AGENT_ID"] ?? _config["AI_FOUNDRY_AGENT_ID"];
+            }
+
+            TokenCredential credential = new ChainedTokenCredential(
+                new AzureCliCredential(),
+                new ManagedIdentityCredential());
+
             var client = new PersistentAgentsClient(endpoint, credential);
             var instructions = _config["AZURE_AI_INSTRUCTIONS"] ?? "You are a helpful assistant for a data marketplace.";
 
-            PersistentAgent agent = client.Administration.CreateAgent(
-                model: model,
-                name: "Data Marketplace Assistant",
-                instructions: instructions,
-                tools: new List<ToolDefinition> { new CodeInterpreterToolDefinition() });
+            PersistentAgent agent;
+            if (!string.IsNullOrWhiteSpace(incomingAgentId))
+            {
+                try
+                {
+                    agent = client.Administration.GetAgent(incomingAgentId).Value;
+                }
+                catch (RequestFailedException ex) when (ex.Status == 404)
+                {
+                    res.StatusCode = HttpStatusCode.BadRequest;
+                    await res.WriteStringAsync(JsonSerializer.Serialize(new { error = $"Agent '{incomingAgentId}' not found" }));
+                    return res;
+                }
+            }
+            else
+            {
+                agent = client.Administration.CreateAgent(
+                    model: model,
+                    name: "Data Marketplace Assistant",
+                    instructions: instructions,
+                    tools: new List<ToolDefinition> { new CodeInterpreterToolDefinition() });
+            }
+
             PersistentAgentThread thread = client.Threads.CreateThread();
 
             res.StatusCode = HttpStatusCode.OK;
@@ -105,10 +151,9 @@ public class AiAgentChatFunction
                 return res;
             }
 
-            var tenantId = _config["AZURE_TENANT_ID"];
-            TokenCredential credential = string.IsNullOrWhiteSpace(tenantId)
-                ? new DefaultAzureCredential()
-                : new DefaultAzureCredential(new DefaultAzureCredentialOptions { TenantId = tenantId });
+            TokenCredential credential = new ChainedTokenCredential(
+                new AzureCliCredential(),
+                new ManagedIdentityCredential());
             var client = new PersistentAgentsClient(endpoint, credential);
 
             if (!root.TryGetProperty("agentId", out var agentIdEl) ||
