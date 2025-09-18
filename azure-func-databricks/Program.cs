@@ -26,9 +26,23 @@ var host = new HostBuilder()
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         });
+        services.AddHttpClient("AiFoundry", client =>
+        {
+            var endpoint = context.Configuration["AI_FOUNDRY_ENDPOINT"] ?? string.Empty;
+            var apiKey = context.Configuration["AI_FOUNDRY_API_KEY"] ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(endpoint))
+            {
+                client.BaseAddress = new Uri(endpoint.TrimEnd('/') + "/");
+            }
+            if (!string.IsNullOrWhiteSpace(apiKey))
+            {
+                client.DefaultRequestHeaders.Add("api-key", apiKey);
+                // Some gateways expect this legacy header name
+                client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", apiKey);
+            }
+        });
         services.AddHttpClient();
         services.AddSingleton<Shared.DatabricksClient>();
-        services.AddSingleton<Shared.FabricAgentClient>();
     })
     .ConfigureFunctionsWorkerDefaults()
     .Build();

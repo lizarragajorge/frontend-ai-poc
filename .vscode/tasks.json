@@ -100,6 +100,16 @@
 			"command": "host start",
 			"isBackground": true,
 			"problemMatcher": "$func-dotnet-watch"
+		},
+		{
+			"label": "build functions (one-off)",
+			"type": "shell",
+			"command": "dotnet",
+			"args": [
+				"build",
+				"/Users/jorgelizarraga/Projects/Proof-of-Concepts/frontend-ai-poc/azure-func-databricks"
+			],
+			"group": "build"
 		}
 	]
 }
